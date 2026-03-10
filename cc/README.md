@@ -1,4 +1,4 @@
-# OpenGates CC
+# InboundAI
 
 Commercial app surface for OpenGates.
 
@@ -8,6 +8,11 @@ This project reuses the OSS runtime as a dependency, but keeps its own:
 - copy and styling
 - commercial product experiments
 
+Commercial docs:
+- `docs/product.md`
+- `docs/website-copy.md`
+- `docs/agent-access.md`
+
 ## Run
 ```bash
 cd cc
@@ -16,6 +21,12 @@ uv run opengates-cc serve --host 127.0.0.1 --port 8100
 ```
 
 Open [http://127.0.0.1:8100/demo](http://127.0.0.1:8100/demo).
+
+## Product Rules
+- web intake requires sender email
+- the thread lives in the product, not in the user's inbox
+- inbox read access is not the default commercial product
+- API is the planned system of record for agent access; MCP can wrap it later
 
 ## Environment
 Copy `.env.example` to `.env` or `.env.local`.

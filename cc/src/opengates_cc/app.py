@@ -22,7 +22,7 @@ def create_app() -> FastAPI:
     store = LocalStore(settings.data_dir)
     runtime = GateRuntime(gate_loader=gate_loader, store=store, provider=build_provider(settings))
 
-    app = FastAPI(title="OpenGates CC")
+    app = FastAPI(title="InboundAI")
     templates = Jinja2Templates(directory=str(Path(__file__).with_name("templates")))
 
     @app.get("/", response_class=HTMLResponse)
@@ -67,6 +67,8 @@ def create_app() -> FastAPI:
         content: str = Form(...),
         priority_paid: str | None = Form(None),
     ) -> RedirectResponse:
+        if not email.strip():
+            raise HTTPException(status_code=400, detail="email is required for web intake")
         try:
             processed = runtime.start_thread(
                 gate_id,

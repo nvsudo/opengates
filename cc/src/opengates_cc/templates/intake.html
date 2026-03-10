@@ -42,7 +42,7 @@
         <div class="eyebrow">{{ gate.surface_label|title }}</div>
         <div class="headline">Send the best version of your ask.</div>
         <div class="message-copy">
-          Relevant detail beats length. If this desk needs more signal, it will ask a follow-up instead of forcing inbox access.
+          Relevant detail beats length. Web intake requires email so the thread can be verified, resumed, and handed off cleanly if this desk decides to move it forward.
         </div>
       </div>
 
@@ -57,7 +57,7 @@
             </div>
             <div class="field">
               <label for="email">Email</label>
-              <input id="email" name="email" type="email" placeholder="Optional for later handoff">
+              <input id="email" name="email" type="email" placeholder="Required for verification and handoff" required>
             </div>
           </div>
 
@@ -76,6 +76,9 @@
               <div class="subnote">Priority review is off for this desk.</div>
             {% endif %}
             <button class="primary-button" type="submit">Start conversation</button>
+          </div>
+          <div class="subnote">
+            Your email is used to verify the sender, continue the thread, and handle a later intro or CC if this reaches the person behind the desk.
           </div>
         </form>
       </div>
