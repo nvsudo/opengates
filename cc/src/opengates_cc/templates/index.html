@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}OpenGates CC{% endblock %}
+
+{% block screen %}
+  <div class="topbar">
+    <div class="nav-pill">
+      <div class="nav-main">
+        <div class="avatar">OG</div>
+        <div>
+          <div class="nav-title">OpenGates</div>
+          <div class="nav-status">Commercial preview surface</div>
+        </div>
+      </div>
+      <div class="nav-action">+</div>
+    </div>
+  </div>
+
+  <div class="scroll">
+    <div class="center-copy">
+      <div class="eyebrow">Choose a desk</div>
+      <div class="headline">Each desk invites a different kind of inbound.</div>
+      <div class="body-copy" style="color: var(--muted);">
+        The runtime is shared. The public experience is not.
+      </div>
+    </div>
+
+    <div class="desk-list">
+      {% for desk in desks %}
+        <a class="desk-link" href="{{ desk.public_path }}">
+          <div class="desk-name">{{ desk.title }}</div>
+          <div class="desk-preview">{{ desk.preview }}</div>
+        </a>
+      {% else %}
+        <div class="bubble system">No desks are configured yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
