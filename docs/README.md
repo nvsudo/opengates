@@ -17,6 +17,8 @@ This repository uses a simple dependency tree so product decisions can be traced
   - [Schemas Spec](specs/schemas.md)
 - Derived Review
   - [OSS Implementation Review](implementation-review.md)
+- Launch
+  - [Launch Playbook](launch-playbook.md)
 
 ## Dependency Rules
 - If the thesis changes, review every downstream document.
@@ -39,3 +41,4 @@ This tree is intentionally small. The current product spine is:
 - PRD
 - four implementation-facing specs
 - one OSS implementation review
+- one launch playbook
