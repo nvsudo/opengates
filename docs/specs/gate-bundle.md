@@ -39,6 +39,8 @@ The gate bundle should be small enough for a user to create with their preferred
 `gate.yaml`
 - runtime settings only
 - gate id
+- public title or assistant/display name
+- softer public surface label for the reference UI
 - public path or slug
 - max clarification rounds
 - thread expiry
