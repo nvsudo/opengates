@@ -18,8 +18,8 @@ Each thread contains:
 - ordered messages
 - thread state
 - clarification depth state
-- optional charging or priority metadata
 - final outcome, if reached
+- principal-facing escalation summary, if reached
 
 ## Default Channel Model
 - The default ingress is a public gate page or web endpoint.
@@ -56,14 +56,15 @@ Each thread contains:
 - The runtime may support session-based continuation, magic-link resumption, or optional email-based resumption.
 - Email should be optional for resume and handoff, not required for basic use.
 
-## Charging
-- Charging is optional and gate-specific.
-- A gate may charge at entry, for priority treatment, or to offset deeper diligence costs.
-- Charging must not guarantee escalation or access.
+## Commercial Boundary
+- OpenGates thread state does not carry payment state.
+- Ante may attach payment state around the thread, but the runtime should only receive the message and gate context it needs to judge.
+- Payment must not guarantee escalation or access.
 
 ## Handoff
 - Escalated threads may trigger optional outbound actions such as:
   - notifying the principal
+  - sending an escalation email with a concise summary and `why_this_matters`
   - creating an intro email
   - posting to a review queue
 - These outbound transports are separate from the default thread experience.

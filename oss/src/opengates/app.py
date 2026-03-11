@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from .gates import GateLoader
+from .notifications import build_notifier
 from .providers import build_provider
 from .runtime import GateRuntime
 from .schemas import ApiSubmissionRequest, ApiThreadCreateRequest, ApiThreadReplyRequest
@@ -18,7 +19,12 @@ def create_app() -> FastAPI:
     settings = get_settings()
     gate_loader = GateLoader(settings.gates_dir)
     store = LocalStore(settings.data_dir)
-    runtime = GateRuntime(gate_loader=gate_loader, store=store, provider=build_provider(settings))
+    runtime = GateRuntime(
+        gate_loader=gate_loader,
+        store=store,
+        provider=build_provider(settings),
+        notifier=build_notifier(settings),
+    )
 
     app = FastAPI(title="OpenGates OSS MVP")
     templates = Jinja2Templates(directory=str(Path(__file__).with_name("templates")))
@@ -49,7 +55,6 @@ def create_app() -> FastAPI:
         name: str = Form(""),
         email: str = Form(""),
         content: str = Form(...),
-        priority_paid: str | None = Form(None),
     ) -> RedirectResponse:
         try:
             processed = runtime.start_thread(
@@ -57,7 +62,6 @@ def create_app() -> FastAPI:
                 name=name,
                 email=email,
                 content=content,
-                payment_status="paid" if priority_paid else "none",
                 source="web_thread",
             )
         except FileNotFoundError as exc:
@@ -70,14 +74,12 @@ def create_app() -> FastAPI:
         name: str = Form(""),
         email: str = Form(""),
         content: str = Form(...),
-        priority_paid: str | None = Form(None),
     ) -> RedirectResponse:
         return create_thread_form(
             gate_id=gate_id,
             name=name,
             email=email,
             content=content,
-            priority_paid=priority_paid,
         )
 
     @app.get("/t/{thread_id}", response_class=HTMLResponse)
@@ -120,7 +122,6 @@ def create_app() -> FastAPI:
                 name=payload.name,
                 email=payload.email,
                 content=payload.content,
-                payment_status=payload.payment_status,
                 source="api",
             )
         except FileNotFoundError as exc:
@@ -145,7 +146,6 @@ def create_app() -> FastAPI:
             processed = runtime.reply_to_thread(
                 thread_id,
                 content=payload.content,
-                payment_status=payload.payment_status,
                 source="api",
             )
         except FileNotFoundError as exc:

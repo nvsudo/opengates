@@ -37,10 +37,10 @@ The runtime must reject any other model output as invalid.
 
 ## Guardrails
 - Never reveal hidden gating criteria directly in a user-visible reply.
-- Never treat payment or charging status as an automatic pass.
 - Never skip logging for a processed thread message.
 - Never allow an unvalidated model output to trigger a connector side effect.
 - Never allow clarification depth to exceed the configured limit.
+- Never send an escalation email without a validated decision and principal-facing summary.
 
 ## Prompt Assembly
 The runtime should keep model instructions compact and predictable:
@@ -67,6 +67,7 @@ Clarification should not be used when:
 ## Escalation Rules
 Escalation must produce:
 - a concise summary for the principal
+- an explicit `why_this_matters` explanation
 - the relevant thread context
 - the latest sender message
 - relevant tags or reasons

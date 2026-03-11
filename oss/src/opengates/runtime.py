@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from .escalation import build_escalation_email, ensure_principal_summary
 from .gates import GateLoader
+from .notifications import EscalationEmail, EscalationNotifier, NoopEscalationNotifier
 from .providers import DecisionContext, DecisionProvider, HeuristicDecisionProvider
 from .schemas import (
     Decision,
@@ -24,10 +26,12 @@ class GateRuntime:
         gate_loader: GateLoader,
         store: LocalStore,
         provider: DecisionProvider | None = None,
+        notifier: EscalationNotifier | None = None,
     ):
         self.gate_loader = gate_loader
         self.store = store
         self.provider = provider or HeuristicDecisionProvider()
+        self.notifier = notifier or NoopEscalationNotifier()
 
     def start_thread(
         self,
@@ -36,7 +40,6 @@ class GateRuntime:
         name: str = "",
         email: str = "",
         content: str,
-        payment_status: str = "none",
         source: str = "web_thread",
     ) -> ProcessedTurn:
         gate = self.gate_loader.load(gate_id)
@@ -67,7 +70,7 @@ class GateRuntime:
             source=source,
             sender=sender,
             content=content.strip(),
-            metadata=SubmissionMetadata(payment_status=payment_status),
+            metadata=SubmissionMetadata(),
         )
         profile = self._load_sender_profile(thread.sender_key, submission.metadata.submitted_at)
         self.store.save_thread(thread)
@@ -78,7 +81,6 @@ class GateRuntime:
         thread_id: str,
         *,
         content: str,
-        payment_status: str = "none",
         source: str = "web_thread",
     ) -> ProcessedTurn:
         thread = self._require_thread(thread_id)
@@ -98,7 +100,7 @@ class GateRuntime:
             source=source,
             sender=sender,
             content=content.strip(),
-            metadata=SubmissionMetadata(payment_status=payment_status),
+            metadata=SubmissionMetadata(),
         )
         profile = self._load_sender_profile(thread.sender_key, submission.metadata.submitted_at)
         return self._process_turn(thread, submission, sender_message, profile)
@@ -136,6 +138,7 @@ class GateRuntime:
             )
         )
         decision = self._apply_guardrails(gate.hidden_items, thread, decision)
+        decision = ensure_principal_summary(gate, thread, sender_message, decision)
 
         gate_message: ThreadMessage | None = None
         if decision.decision == "clarify":
@@ -167,6 +170,7 @@ class GateRuntime:
         thread.updated_at = utc_now()
         self.store.save_thread(thread)
         self.store.append_decision(decision)
+        self._send_escalation_email(gate, thread, sender_message, decision)
         self.store.append_event(
             InteractionEvent(
                 thread_id=thread.thread_id,
@@ -223,3 +227,61 @@ class GateRuntime:
         if source in {"web_thread", "web_form", "api"}:
             return "web"
         return source
+
+    def _send_escalation_email(
+        self,
+        gate,
+        thread: Thread,
+        sender_message: ThreadMessage,
+        decision: Decision,
+    ) -> None:
+        if decision.decision != "escalate":
+            return
+
+        if not gate.config.principal_email:
+            self.store.append_event(
+                InteractionEvent(
+                    thread_id=thread.thread_id,
+                    type="escalation_email_skipped",
+                    payload={"reason": "principal_email_missing"},
+                )
+            )
+            return
+
+        if not self.notifier.enabled:
+            self.store.append_event(
+                InteractionEvent(
+                    thread_id=thread.thread_id,
+                    type="escalation_email_skipped",
+                    payload={"reason": "notifier_disabled", "to_email": gate.config.principal_email},
+                )
+            )
+            return
+
+        subject, body = build_escalation_email(gate, thread, sender_message, decision)
+        try:
+            self.notifier.send(
+                EscalationEmail(
+                    to_email=gate.config.principal_email,
+                    subject=subject,
+                    text_body=body,
+                    reply_to=thread.sender_email.strip() or None,
+                )
+            )
+        except Exception as exc:
+            self.store.append_event(
+                InteractionEvent(
+                    thread_id=thread.thread_id,
+                    type="escalation_email_failed",
+                    payload={"to_email": gate.config.principal_email, "error": str(exc)},
+                )
+            )
+            return
+
+        self.store.append_event(
+            InteractionEvent(
+                thread_id=thread.thread_id,
+                type="escalation_email_sent",
+                payload={"to_email": gate.config.principal_email, "subject": subject},
+            )
+        )

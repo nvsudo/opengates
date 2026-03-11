@@ -9,7 +9,7 @@
 ## Product Summary
 OpenGates is a local-first, agent-native runtime that evaluates inbound through a hosted conversation thread and chooses one of three actions on each turn: decline, clarify, or escalate.
 
-The first product experience is a hosted gate page backed by a local runtime. The sender starts a thread with the gate, the gate may ask bounded follow-up questions, and only the best items reach the principal. Inbox read access is explicitly non-default.
+The first product experience is a hosted line page backed by a local runtime. The commercial product calls these lines; the OSS runtime may still use `gate` terminology internally. The sender starts a thread with the line, the line may ask bounded follow-up questions, and only the best items reach the principal. Inbox read access is explicitly non-default.
 
 The built-in web experience is a reference UI. The product core is the thread engine and decision runtime, which should also be usable from external forms, chats, or custom frontends over API.
 
@@ -34,11 +34,16 @@ The user should only need to define:
 - how they want replies to sound
 - a few examples of good, bad, and ambiguous inbound
 
-The user may also configure operational settings in `gate.yaml`:
+The user may also configure operational settings in `gate.yaml` for OSS internals, or `line.yaml` in the commercial product:
 - public route or path
 - max clarification rounds
-- optional charging or priority settings
+- principal notification email
 - optional outbound notifications or handoff transports
+
+Commercial `line.yaml` may additionally configure:
+- payment amount
+- payment timing
+- direct payout destination to the principal
 
 ## Primary User Flow
 1. User creates a new gate from a starter template.
@@ -72,18 +77,23 @@ The user may also configure operational settings in `gate.yaml`:
 - The runtime must output exactly one of `decline`, `clarify`, or `escalate` on each turn.
 - The runtime must produce a structured decision object.
 - The runtime must support private reasoning and user-visible reply text separately.
+- The runtime must produce a principal-facing escalation summary with an explicit `why_this_matters` explanation.
 - `clarify` may repeat across multiple turns, but only up to `max_clarification_rounds` for that gate.
 - When the turn limit is exhausted, the runtime must force a final action or mark the thread for review.
 
 ### Channel Behavior
 - The default return path must be the gate-owned web thread.
 - The system may optionally send outbound email, notifications, or intros after a decision.
+- OpenGates must be able to send the initial escalation email when a principal email and delivery config are present.
 - Inbox read access is optional and explicitly non-default.
 
 ### Charging
-- The system may support optional charging or priority lanes on a per-gate basis.
-- Charging may offset token costs or deter unserious inbound.
-- Charging must not force escalation by itself.
+- Ante must support per-line payment, including `$0`, on a per-line basis.
+- Ante must support payment timing either before the conversation starts or after the AI qualifies the sender.
+- MVP payment routing must go directly to the principal's Stripe Connect Express account.
+- Charity, org-pool, and split routing are post-MVP.
+- Payment must not force escalation by itself.
+- OpenGates must not depend on payment state to evaluate a thread.
 
 ### Guardrails
 - The runtime must support rules that are enforced outside the model.
@@ -94,6 +104,8 @@ The user may also configure operational settings in `gate.yaml`:
 ### Logging And Review
 - Every thread message must be logged with the input, decision, and resulting action.
 - The user must be able to inspect why a thread was escalated, declined, or kept open.
+- Escalated threads must include a principal-facing summary that CC can reuse in dashboards and email.
+- The commercial product must provide a principal review surface for escalated threads.
 - The system must persist sender history, thread state, and prior interaction context.
 
 ## Non-Functional Requirements

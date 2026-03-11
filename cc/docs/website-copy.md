@@ -1,40 +1,21 @@
-# InboundAI Website Copy
+# Ante Website Copy
 
-## Homepage
-### Hero
-Kicker:
-`Inbound router`
+Canonical V4 homepage copy now lives in:
+- `/ante-homepage.html`
+- `/README.md`
+- `/brand-guidelines.md`
+- `/Thesis.md`
 
-Headline:
-`Let the right inbound get through.`
+This file should only hold supporting notes for product surfaces that do not yet have finalized V4 artifacts.
 
-Body:
-`InboundAI gives every person a mobile-first intake surface with topics they invite, a bounded AI conversation, and a clean handoff path when something is worth attention.`
+## Current MVP Copy Constraints
+- Use `line` in commercial and public-facing contexts.
+- Homepage CTA is `Request early access`.
+- Secondary CTA is `Have an invite code? Enter it here`.
+- Payment is direct to the principal in MVP.
+- Charity, org-pool, and split routing are post-MVP.
 
-### How It Works
-Title:
-`How it works`
-
-Body:
-`Pick the person or desk you want to reach. Choose the topic that matches. Send a clear ask. If the desk needs more signal, it asks follow-ups before it declines, escalates, or routes onward.`
-
-### Email Requirement
-Title:
-`Why email is required on web`
-
-Body:
-`Email is the identity anchor for web intake. It lets InboundAI verify the sender, resume the thread later, and create a clean intro or CC when a real handoff happens.`
-
-### Agent Access
-Title:
-`For agents too`
-
-Body:
-`Agents should write through the API first. MCP can sit on top later as a tool layer for agent-native clients. The thread API remains the system of record for billing, search, and routing.`
-
-## Intake Screen
-Assistant explainer:
-`Relevant detail beats length. Web intake requires email so the thread can be verified, resumed, and handed off cleanly if this desk decides to move it forward.`
-
-Email helper:
-`Your email is used to verify the sender, continue the thread, and handle a later intro or CC if this reaches the person behind the desk.`
+## Sender-Facing Surfaces Still Pending V4 Finals
+- line page
+- thread page
+- escalation email

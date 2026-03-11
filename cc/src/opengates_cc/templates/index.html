@@ -1,67 +1,580 @@
 {% extends "base.html" %}
 
-{% block title %}InboundAI{% endblock %}
+{% block title %}Ante — Your attention has a price{% endblock %}
 
-{% block screen %}
-  <div class="topbar">
-    <div class="nav-pill">
-      <div class="nav-main">
-        <div class="avatar">IA</div>
+{% block body %}
+  <main class="main main--full">
+
+    <!-- ═══ HERO ═══ -->
+    <div class="section" style="padding-top: 100px; padding-bottom: 60px;">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <div class="label">Attention is the last scarce resource</div>
+          <h1 class="hero-headline">Your attention<br>has a front door.</h1>
+          <p class="hero-sub">
+            AI made outbound free. Now a million agents pitch you before breakfast. Ante is the fix — a public address with judgment behind it, your voice, hidden criteria, and a price that proves intent. Senders ante up. The best get through.
+          </p>
+          <div class="btn-row">
+            <a class="btn btn-lg btn-primary" href="#start">Create your Ante</a>
+            <a class="btn btn-lg btn-outline" href="#how">See how it works</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <!-- The @-handle cards -->
+          <div class="handle-stack">
+            <div class="handle-card handle-card--featured">
+              <div class="handle-at">pitch<span class="handle-sep">@</span>a16z</div>
+              <div class="handle-ante">$25,000 ante</div>
+              <div class="handle-desc">Series B+ · AI infrastructure · Enterprise SaaS</div>
+            </div>
+            <div class="handle-card">
+              <div class="handle-at">mentor<span class="handle-sep">@</span>emusk</div>
+              <div class="handle-ante">$5,000 ante</div>
+              <div class="handle-desc">Deep tech · Energy · Space · Manufacturing</div>
+            </div>
+            <div class="handle-card">
+              <div class="handle-at">collab<span class="handle-sep">@</span>mkbhd</div>
+              <div class="handle-ante">$500 ante</div>
+              <div class="handle-desc">Brand partnerships · Product reviews · Tech</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROOF BAR ═══ -->
+    <div class="proof-bar">
+      <div class="section" style="padding-top: 0; padding-bottom: 0;">
+        <div class="proof-inner">
+          <span>Payment = proof of intent</span>
+          <span class="proof-dot"></span>
+          <span>Criteria stay hidden</span>
+          <span class="proof-dot"></span>
+          <span>Your voice, your rules</span>
+          <span class="proof-dot"></span>
+          <span>Bring your own LLM key or use ours</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ THE PROBLEM (dark band) ═══ -->
+    <div class="band-dark">
+      <div class="section">
+        <div class="label" style="color: var(--accent);">The shift</div>
+        <h2 class="section-head" style="color: #fff; max-width: 640px;">
+          When sending is free,<br>noise wins.
+        </h2>
+        <p class="section-sub" style="color: var(--dark-muted); max-width: 560px; margin-top: 20px;">
+          Cold outbound is automated, personalized, and free. AI agents write pitches, fill forms, and blast inboxes at zero marginal cost. The cost of reaching you dropped to nothing. But the cost of <em style="color: var(--dark-text);">reading</em> it didn't.
+        </p>
+        <p class="section-sub" style="color: var(--dark-muted); max-width: 560px;">
+          Ante creates a price signal. Senders put real money on the table before they see your criteria. The payment isn't a fee — it's proof of intent. A $25,000 ante on a VC pitch means the founder believes in what they're building. A $500 ante on a brand collab means the company is serious. The money filters. The judgment decides.
+        </p>
+        <div class="stat-row">
+          <div>
+            <div class="stat-num">10×</div>
+            <div class="stat-label">increase in AI-generated outbound since 2024</div>
+          </div>
+          <div>
+            <div class="stat-num">~3%</div>
+            <div class="stat-label">cold email reply rate, and falling</div>
+          </div>
+          <div>
+            <div class="stat-num">$0</div>
+            <div class="stat-label">cost to send — until now</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ THE @-HANDLE SYSTEM ═══ -->
+    <div class="section" id="how">
+      <div class="text-center">
+        <div class="label">How it works</div>
+        <h2 class="section-head mx-auto">One address. Infinite leverage.</h2>
+        <p class="section-sub mx-auto" style="text-align: center;">
+          Your Ante is a public address — like an email, but with judgment behind it. Senders see the address, pay the ante, and make their case. The AI conducts a real conversation, asks sharp follow-ups, and only escalates what deserves your time.
+        </p>
+      </div>
+
+      <div class="handle-demo">
+        <div class="handle-demo-address">
+          <div class="handle-demo-at">pitch<span class="handle-sep">@</span>you</div>
+          <div class="handle-demo-meta">Ante: $50 · Applied AI, Vertical SaaS, Infra</div>
+        </div>
+        <div class="handle-demo-flow">
+          <div class="flow-step">
+            <div class="flow-num">1</div>
+            <div>
+              <div class="flow-title">Sender pays the ante</div>
+              <div class="flow-body">Real money, upfront. Covers token cost, proves intent, filters noise before a single word is read.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">2</div>
+            <div>
+              <div class="flow-title">AI conducts the conversation</div>
+              <div class="flow-body">The sender makes their case. The AI — speaking in your voice, using your hidden criteria — asks exactly one follow-up at a time. Bounded. Direct.</div>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num">3</div>
+            <div>
+              <div class="flow-title">You see only what survives</div>
+              <div class="flow-body">Declined warmly. Clarified efficiently. Escalated with a clean summary and the sender's ante attached. You touch nothing until something earns it.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Asset placeholder: product walkthrough -->
+      <div class="asset-placeholder" style="margin-top: 40px;">
         <div>
-          <div class="nav-title">InboundAI</div>
-          <div class="nav-status">The inbound router for scarce attention</div>
+          <div style="font-size: 1.4rem; margin-bottom: 8px;">🎬</div>
+          <div><strong>ASSET NEEDED:</strong> Product walkthrough</div>
+          <div style="margin-top: 4px; max-width: 400px;">30-sec screen recording: sender lands on an @-address page, pays the ante, writes their pitch, gets a follow-up question, responds, gets escalated</div>
         </div>
-      </div>
-      <div class="nav-action">↗</div>
-    </div>
-  </div>
-
-  <div class="scroll">
-    <div class="stack">
-      <div class="hero-card">
-        <div class="hero-kicker">Inbound router</div>
-        <h1 class="hero-title">Let the right inbound get through.</h1>
-        <div class="hero-body">
-          InboundAI gives every person a mobile-first intake surface with topics they invite, a bounded AI conversation, and a clear handoff path when something is worth attention.
-        </div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-title">How it works</div>
-        <div class="info-body">
-          Pick the person or desk you want to reach. Choose the topic that matches. Send a clear ask. If the desk needs more signal, it asks follow-ups before it declines, escalates, or routes onward.
-        </div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-title">Why email is required on web</div>
-        <div class="info-body">
-          Email is the identity anchor for web intake. It lets InboundAI verify the sender, resume the thread later, and create a clean intro or CC when a real handoff happens.
-        </div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-title">For agents too</div>
-        <div class="info-body">
-          Agents should write through the API first. MCP can sit on top later as a tool layer for agent-native clients. The thread API remains the system of record for billing, search, and routing.
-        </div>
-      </div>
-
-      <div class="center-copy">
-        <div class="eyebrow">Live desks</div>
-        <div class="headline">Each desk invites a different kind of inbound.</div>
-      </div>
-
-      <div class="desk-list">
-        {% for desk in desks %}
-          <a class="desk-link" href="{{ desk.public_path }}">
-            <div class="desk-name">{{ desk.title }}</div>
-            <div class="desk-preview">{{ desk.preview }}</div>
-          </a>
-        {% else %}
-          <div class="bubble system">No desks are configured yet.</div>
-        {% endfor %}
       </div>
     </div>
-  </div>
+
+    <!-- ═══ CONVERSATION, NOT A FORM (accent band) ═══ -->
+    <div class="band-accent">
+      <div class="section">
+        <div class="feature-row" style="align-items: start;">
+          <div>
+            <h2 class="section-head" style="color: #fff;">It's a conversation,<br>not a form.</h2>
+            <p style="color: rgba(255,255,255,0.85); line-height: 1.6; margin-top: 16px; font-size: 1.05rem;">
+              Most filters are binary — pass or block. Ante runs a real conversation. It reads the pitch, asks a sharp follow-up, and makes a judgment call based on what comes back. The sender gets a fair shot. You get signal, not slush.
+            </p>
+            <p style="color: rgba(255,255,255,0.7); line-height: 1.6; margin-top: 12px; font-size: 0.95rem;">
+              Every Ante speaks in your voice. Declines are warm, not corporate. Follow-ups are specific, not templated. The sender never knows the criteria — they just feel like they're talking to someone sharp who respects their time.
+            </p>
+          </div>
+          <div>
+            <div class="demo-frame" style="border-color: rgba(255,255,255,0.2);">
+              <div class="demo-header" style="border-color: rgba(255,255,255,0.1);"><span class="demo-dot" style="background: #fff;"></span> <span style="color: rgba(255,255,255,0.7);">pitch@a16z</span></div>
+              <div class="demo-chat" style="background: rgba(0,0,0,0.15);">
+                <div class="demo-msg demo-msg--sender" style="background: rgba(255,255,255,0.15); color: #fff;">We're building AI infra for compliance teams. Series A, $2M ARR, 3x YoY. Would love 20 min.</div>
+                <div class="demo-msg demo-msg--gate" style="background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9);">Interesting space. What's your wedge against Palantir's AIP in regulated industries?</div>
+                <div class="demo-msg demo-msg--sender" style="background: rgba(255,255,255,0.15); color: #fff;">API-first, deploy in hours not months. Two Fortune 500 banks live in under a week.</div>
+                <div class="demo-msg demo-msg--result" style="background: rgba(255,255,255,0.12); color: #fff;">✓ Escalated — $25,000 ante attached</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ WHO IT'S FOR ═══ -->
+    <div class="section">
+      <div class="text-center">
+        <div class="label">Who it's for</div>
+        <h2 class="section-head mx-auto">Built for people whose<br>time has a price.</h2>
+        <p class="section-sub mx-auto" style="text-align: center;">
+          If people pay to reach you, they're serious. Every persona below runs a different Ante with different criteria, different economics — same intelligence underneath.
+        </p>
+      </div>
+      <div class="persona-grid">
+        <div class="persona-card">
+          <div class="handle-mini">pitch@</div>
+          <div class="persona-title">Investors</div>
+          <div class="persona-body">Filter inbound deal flow by thesis fit, stage, and traction — before you open a single deck.</div>
+          <div class="persona-topics">
+            <span class="persona-chip">$25,000 ante</span>
+            <span class="persona-chip">Applied AI</span>
+            <span class="persona-chip">Series B+</span>
+          </div>
+        </div>
+        <div class="persona-card">
+          <div class="handle-mini">mentor@</div>
+          <div class="persona-title">Executives</div>
+          <div class="persona-body">Partnerships, vendors, and recruiters make their case. The ante proves they're not wasting your time.</div>
+          <div class="persona-topics">
+            <span class="persona-chip">$5,000 ante</span>
+            <span class="persona-chip">Strategic</span>
+            <span class="persona-chip">Board-level</span>
+          </div>
+        </div>
+        <div class="persona-card">
+          <div class="handle-mini">collab@</div>
+          <div class="persona-title">Creators</div>
+          <div class="persona-body">Brand deals, speaking invites, consulting asks — without an assistant or a flooded DM inbox.</div>
+          <div class="persona-topics">
+            <span class="persona-chip">$500 ante</span>
+            <span class="persona-chip">Brands</span>
+            <span class="persona-chip">Speaking</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ECONOMICS (dark band) ═══ -->
+    <div class="band-dark" id="pricing">
+      <div class="section">
+        <div class="text-center">
+          <div class="label" style="color: var(--accent);">Your economics</div>
+          <h2 class="section-head" style="color: #fff;">You set the price.<br>The market responds.</h2>
+          <p class="section-sub mx-auto" style="color: var(--dark-muted); text-align: center;">
+            The ante is yours to set. Free if you want — effort alone can be the filter. Or set a price that matches the value of your time. The sender decides if it's worth it. That decision is the signal.
+          </p>
+        </div>
+        <div class="econ-grid">
+          <div class="econ-card econ-card--dark">
+            <div class="econ-icon">🆓</div>
+            <div class="econ-title">Free</div>
+            <div class="econ-body">Effort and specificity are the only cost. Judgment does the filtering.</div>
+          </div>
+          <div class="econ-card econ-card--dark">
+            <div class="econ-icon">🎫</div>
+            <div class="econ-title">Flat ante</div>
+            <div class="econ-body">$5 or $50,000. Covers tokens, signals seriousness. Not a paywall — a noise floor.</div>
+          </div>
+          <div class="econ-card econ-card--dark">
+            <div class="econ-icon">⚡</div>
+            <div class="econ-title">Priority lane</div>
+            <div class="econ-body">Free path stays open. Paid path gets faster review and higher priority.</div>
+          </div>
+          <div class="econ-card econ-card--dark">
+            <div class="econ-icon">📈</div>
+            <div class="econ-title">Auction</div>
+            <div class="econ-body">Senders name their price. Market-driven signal for the busiest people alive.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ BRING YOUR LLM ═══ -->
+    <div class="section">
+      <div class="feature-row">
+        <div>
+          <div class="label">Infrastructure</div>
+          <h2 class="section-head">Bring your LLM key.<br>Or use ours.</h2>
+          <p class="section-sub">
+            Ante works with any OpenAI-compatible API. Plug in your own key for full control over model, cost, and data residency. Or use our hosted inference — no setup, instant start.
+          </p>
+          <p class="section-sub" style="margin-top: 12px;">
+            Your criteria, your voice files, your conversation data. Nothing leaves your control unless you want it to.
+          </p>
+        </div>
+        <div>
+          <div class="llm-options">
+            <div class="llm-option">
+              <div class="llm-option-title">Hosted</div>
+              <div class="llm-option-body">Zero config. We handle inference. You set the rules.</div>
+            </div>
+            <div class="llm-option llm-option--alt">
+              <div class="llm-option-title">BYOK</div>
+              <div class="llm-option-body">Your OpenAI / Anthropic / local key. Full control.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CTA ═══ -->
+    <div class="band-dark" id="start">
+      <div class="section text-center" style="padding-top: 100px; padding-bottom: 100px;">
+        <h2 class="hero-headline" style="color: #fff; font-size: clamp(2.2rem, 5vw, 3.2rem);">
+          Stop triaging.<br>Start charging.
+        </h2>
+        <p class="section-sub mx-auto" style="color: var(--dark-muted); text-align: center; margin-top: 16px;">
+          Your inbox shouldn't be a to-do list for strangers. Create your Ante, set your price, and let judgment handle the rest.
+        </p>
+        <div class="btn-row" style="justify-content: center;">
+          <a class="btn btn-lg btn-primary" href="#">Create your Ante — it's free to start</a>
+        </div>
+        <p style="color: var(--dark-muted); font-size: 0.85rem; margin-top: 16px;">
+          Open-source core on <a href="https://github.com/nickvora/ante" style="color: var(--accent);" target="_blank">GitHub</a>. Self-host or use hosted. Your call.
+        </p>
+      </div>
+    </div>
+
+  </main>
+{% endblock %}
+
+{% block head %}
+<style>
+  /* ─── Homepage-specific styles ─── */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .hero-visual {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* ─── @-handle cards ─── */
+  .handle-stack {
+    display: grid;
+    gap: 14px;
+    max-width: 400px;
+  }
+
+  .handle-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .handle-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow-lg);
+  }
+
+  .handle-card--featured {
+    background: var(--dark);
+    border-color: transparent;
+    color: var(--dark-text);
+  }
+
+  .handle-card--featured .handle-desc {
+    color: var(--dark-muted);
+  }
+
+  .handle-at {
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+  }
+
+  .handle-sep {
+    color: var(--accent);
+  }
+
+  .handle-ante {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 4px;
+  }
+
+  .handle-desc {
+    font-size: 0.82rem;
+    color: var(--text-2);
+    margin-top: 4px;
+  }
+
+  .handle-mini {
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  /* Proof bar */
+  .proof-bar {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+  }
+
+  .proof-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-2);
+    letter-spacing: 0.01em;
+  }
+
+  .proof-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--text-3);
+    flex-shrink: 0;
+  }
+
+  /* ─── Handle demo (how it works) ─── */
+  .handle-demo {
+    margin-top: 48px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--card-shadow-lg);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .handle-demo-address {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .handle-demo-at {
+    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  .handle-demo-meta {
+    font-size: 0.82rem;
+    color: var(--text-2);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  .handle-demo-flow {
+    padding: 28px;
+    display: grid;
+    gap: 24px;
+  }
+
+  .flow-step {
+    display: flex;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .flow-num {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    color: white;
+    display: grid;
+    place-items: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .flow-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .flow-body {
+    font-size: 0.88rem;
+    color: var(--text-2);
+    line-height: 1.5;
+  }
+
+  /* ─── Economics grid (dark variant) ─── */
+  .econ-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .econ-card--dark {
+    background: var(--dark-surface);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: var(--radius-lg);
+    padding: 28px 20px;
+    text-align: center;
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+
+  .econ-card--dark:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.12);
+  }
+
+  .econ-icon {
+    font-size: 1.6rem;
+    margin-bottom: 14px;
+  }
+
+  .econ-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .econ-body {
+    font-size: 0.85rem;
+    color: var(--dark-muted);
+    line-height: 1.5;
+  }
+
+  /* ─── LLM options ─── */
+  .llm-options {
+    display: grid;
+    gap: 14px;
+  }
+
+  .llm-option {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: transform 200ms ease;
+  }
+
+  .llm-option:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow-lg);
+  }
+
+  .llm-option--alt {
+    background: var(--dark);
+    border-color: transparent;
+    color: var(--dark-text);
+  }
+
+  .llm-option--alt .llm-option-body {
+    color: var(--dark-muted);
+  }
+
+  .llm-option-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .llm-option-body {
+    font-size: 0.88rem;
+    color: var(--text-2);
+    line-height: 1.5;
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 768px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .hero-visual {
+      justify-content: center;
+    }
+    .handle-stack {
+      max-width: 100%;
+    }
+    .econ-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .proof-inner {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .handle-demo {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .econ-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
 {% endblock %}

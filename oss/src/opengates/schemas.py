@@ -7,7 +7,6 @@ from uuid import uuid4
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 DecisionKind = Literal["decline", "clarify", "escalate"]
-PaymentStatus = Literal["none", "paid"]
 ThreadStatus = Literal["open", "waiting_on_sender", "evaluating", "escalated", "declined", "expired", "review"]
 MessageRole = Literal["sender", "gate", "system"]
 
@@ -22,7 +21,6 @@ class Sender(BaseModel):
 
 
 class SubmissionMetadata(BaseModel):
-    payment_status: PaymentStatus = "none"
     submitted_at: datetime = Field(default_factory=utc_now)
 
 
@@ -62,6 +60,13 @@ class ThreadMessage(BaseModel):
     created_at: datetime = Field(default_factory=utc_now)
 
 
+class PrincipalSummary(BaseModel):
+    headline: str
+    summary: str
+    why_this_matters: str
+    suggested_next_step: Optional[str] = None
+
+
 class Decision(BaseModel):
     decision_id: str = Field(default_factory=lambda: f"dec_{uuid4().hex[:12]}")
     thread_id: str
@@ -72,6 +77,7 @@ class Decision(BaseModel):
     tags: list[str] = Field(default_factory=list)
     private_reason: str
     user_visible_reply: Optional[str] = None
+    principal_summary: Optional[PrincipalSummary] = None
     needs_review: bool = False
     remaining_clarification_rounds: int = 0
 
@@ -104,7 +110,6 @@ class ApiThreadCreateRequest(BaseModel):
     name: str = ""
     email: str = ""
     content: str
-    payment_status: PaymentStatus = "none"
 
 
 class ApiSubmissionRequest(ApiThreadCreateRequest):
@@ -113,7 +118,6 @@ class ApiSubmissionRequest(ApiThreadCreateRequest):
 
 class ApiThreadReplyRequest(BaseModel):
     content: str
-    payment_status: PaymentStatus = "none"
 
 
 class ProcessedTurn(BaseModel):

@@ -22,7 +22,6 @@ Define the minimum internal schemas needed for the MVP.
   },
   "content": "Short pitch or request text",
   "metadata": {
-    "payment_status": "none",
     "submitted_at": "2026-03-10T08:00:00Z"
   }
 }
@@ -68,6 +67,7 @@ Define the minimum internal schemas needed for the MVP.
   "tags": ["founder", "b2b"],
   "private_reason": "Potential fit but lacks traction details",
   "user_visible_reply": "Thanks for reaching out. Could you share current traction and the specific ask?",
+  "principal_summary": null,
   "needs_review": false,
   "remaining_clarification_rounds": 2
 }
@@ -100,6 +100,8 @@ Define the minimum internal schemas needed for the MVP.
 - `decision` must be one of `decline`, `clarify`, or `escalate`.
 - `user_visible_reply` is required for `decline` and `clarify`.
 - `confidence` is required for all decisions.
+- `principal_summary` is optional for non-escalation decisions and should be present for escalations.
+- `principal_summary.why_this_matters` is the canonical explanation reused by email and CC review surfaces.
 - `remaining_clarification_rounds` must never be negative.
 - `private_reason` is never sent to end users.
 
@@ -111,5 +113,4 @@ Define the minimum internal schemas needed for the MVP.
 
 ## Non-Goals
 - analytics warehouse schema
-- billing schema
 - team workflow schema

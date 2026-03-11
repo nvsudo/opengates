@@ -15,6 +15,9 @@ class DeskPresentation:
     assistant_avatar: str
     composer_placeholder: str
     invited_topics: list[str]
+    principal_handle: str
+    payment_enabled: bool
+    ante_amount: str | None
 
 
 def load_presentation(gate: GateBundle) -> DeskPresentation:
@@ -35,4 +38,7 @@ def load_presentation(gate: GateBundle) -> DeskPresentation:
         assistant_avatar=config.get("assistant_avatar") or "IA",
         composer_placeholder=config.get("composer_placeholder") or "Share the context, links, ask, and what makes this timely.",
         invited_topics=[str(item).strip() for item in invited_topics if str(item).strip()],
+        principal_handle=str(config.get("principal_handle") or "ante").strip() or "ante",
+        payment_enabled=bool(config.get("payment_enabled")),
+        ante_amount=str(config.get("ante_amount")).strip() if config.get("ante_amount") is not None else None,
     )

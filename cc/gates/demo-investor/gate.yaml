@@ -1,7 +1,7 @@
 gate_id: demo-investor
-title: Investor Desk
-assistant_name: Investor Desk
-surface_label: desk
+title: Investor Gate
+assistant_name: Investor Gate
+surface_label: gate
 public_path: /demo
 payment_enabled: true
 charge_enabled: false
@@ -10,11 +10,11 @@ escalate_threshold: 0.8
 escalation_channel: log
 max_clarification_rounds: 3
 thread_expiry_hours: 168
-assistant_avatar: ID
-assistant_status: Open to high-signal founder inbound
-welcome_headline: Hi, I'm Investor Desk.
-welcome_body: I screen investor inbound for focused, high-signal opportunities. Pick the track that fits best, then send the clearest version of your ask.
-composer_placeholder: Tell me what you're building, who it is for, current traction or proof, and the specific ask you have.
+assistant_avatar: IG
+assistant_status: Filtering for high-signal founder inbound
+welcome_headline: Investor Gate
+welcome_body: This gate filters inbound for a specific investor. If your ask fits, you'll be heard. Pick the topic that matches and make your case — relevant detail beats length.
+composer_placeholder: What you're building, who it's for, current traction, and your specific ask.
 invited_topics:
   - Applied AI with real user pull
   - B2B software with founder-market fit

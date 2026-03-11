@@ -3,6 +3,13 @@
 ## Purpose
 This repository uses a simple dependency tree so product decisions can be traced from idea to implementation detail.
 
+Canonical V4 brand and product narrative now live in:
+- [README](../README.md)
+- [Thesis](../Thesis.md)
+- [Brand Guidelines](../brand-guidelines.md)
+
+Legacy design artifacts and the V3→V4 handoff have been moved under `archive/`.
+
 ## Tree
 - [Thesis](../Thesis.md)
   - source of truth for why this exists and what kind of product it is

@@ -7,7 +7,7 @@
 - Change impact: Changes here may require PRD and spec updates. Thesis changes only if the product direction changes.
 
 ## MVP Goal
-Prove that a user can define a gate in a few minutes, run a public thread-first gate conversation, and trust the system to decline, clarify, or escalate without leaking private criteria or requiring inbox read access.
+Prove that a user can define a line in a few minutes, run a public thread-first conversation, and trust the system to decline, clarify, or escalate without leaking private criteria or requiring inbox read access.
 
 ## MVP Success Criteria
 - A user creates one working gate bundle in under 15 minutes.
@@ -19,23 +19,27 @@ Prove that a user can define a gate in a few minutes, run a public thread-first 
 
 ## MVP Scope
 Include:
-- one hosted gate page
+- one hosted line page
 - one threaded web conversation flow
-- one local runtime
+- one local OpenGates runtime for judgment
 - one gate bundle format
 - one model provider integration
-- one escalation or notification path
+- one direct Stripe Connect payment flow in Ante that routes money to the principal
+- one principal review surface for escalated threads
+- one principal-facing escalation summary
+- one escalation notification path
 - audit logging
-- optional payment or priority metadata support
 
 Exclude:
 - multi-user workspaces
 - inbox read integrations
 - many connectors
 - adaptive autonomous memory writing
-- a broad dashboard product
+- charity, org-pool, or split payment routing
+- priority lanes or auctions
+- a broad analytics dashboard
 
-## 7-Day Build Sequence
+## 8-Day Build Sequence
 ### Day 1
 - create the gate bundle format
 - build a public gate page
@@ -54,21 +58,26 @@ Exclude:
 - generate starter gate files from user answers
 
 ### Day 4
-- add optional payment metadata or priority lane support
-- ensure payment never bypasses quality thresholds
+- add principal-facing summary output on escalations
+- add initial escalation email delivery from OpenGates
 - support configurable clarification depth, with `3` as the recommended default
 
 ### Day 5
+- wire Stripe Connect payout directly to the principal in Ante
+- add per-line payment amount and timing support in the commercial layer
+- ensure payment never bypasses quality thresholds
+
+### Day 6
 - run a private beta with a few high-inbound users
 - collect real examples of false positives, false negatives, and thread drop-off
 - refine examples, follow-up questions, and reply templates
 
-### Day 6
+### Day 7
 - tighten positioning and onboarding copy
 - publish repository docs
 - record a short thread-based demo
 
-### Day 7
+### Day 8
 - launch publicly
 - onboard early design partners
 - collect requests for connectors, hosting, pricing, and managed setup
@@ -88,10 +97,12 @@ Exclude:
 - overscoping connectors before proving the thread loop
 
 ## Decisions Carried Downstream
-- The MVP is one gate, one public web thread, one model provider, one escalation path.
+- The MVP is one gate runtime, one public line page, one model provider, one escalation path.
 - Inbox read access is not required.
 - Clarification depth is configurable in `gate.yaml` and recommended at `3`.
-- The payment flow is optional and non-default.
+- OpenGates owns judgment, escalation summaries, and escalation email.
+- Ante owns payment, with direct Stripe payout to the principal in MVP.
+- Charity, org-pool, and split routing are post-MVP.
 - The runtime must log structured thread decisions from day one.
 - The user-authoring experience must be template-driven, not config-heavy.
 

@@ -1,14 +1,13 @@
-# InboundAI
+# Ante
 
-Commercial app surface for OpenGates.
+Commercial product surface powered by the OpenGates runtime.
 
 This project reuses the OSS runtime as a dependency, but keeps its own:
-- public UI
-- gate presentation
-- copy and styling
+- public UI and line presentation
+- copy, styling, and brand
 - commercial product experiments
 
-Commercial docs:
+Docs:
 - `docs/product.md`
 - `docs/website-copy.md`
 - `docs/agent-access.md`

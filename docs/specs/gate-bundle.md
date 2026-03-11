@@ -44,8 +44,8 @@ The gate bundle should be small enough for a user to create with their preferred
 - public path or slug
 - max clarification rounds
 - thread expiry
+- principal notification email
 - outbound notifications or handoff transports
-- payment or charging toggle
 - threshold tuning
 
 ## Recommended Folder Layout
@@ -78,7 +78,7 @@ The runtime may derive or maintain additional state, but that state is not requi
 ## Validation Rules
 - A gate bundle is invalid if any required Markdown file is missing.
 - `examples.md` must contain at least one accepted and one rejected example.
-- `gate.yaml`, if present, may configure operational behavior such as route, turn limit, charging, and notifications.
+- `gate.yaml`, if present, may configure operational behavior such as route, turn limit, and notifications.
 - `gate.yaml` must not redefine semantic fit criteria owned by Markdown files.
 - `max_clarification_rounds`, if present, should default to `3` and stay within a bounded range defined by the runtime.
 

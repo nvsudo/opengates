@@ -16,14 +16,12 @@ class GateConfig(BaseModel):
     gate_id: str
     title: str = ""
     assistant_name: str = ""
-    surface_label: str = "desk"
+    surface_label: str = "gate"
     public_path: str | None = None
-    payment_enabled: bool = False
-    charge_enabled: bool = False
-    charge_amount_usd: float | None = None
     clarify_threshold: float = 0.55
     escalate_threshold: float = 0.8
     escalation_channel: str = "log"
+    principal_email: str | None = None
     max_clarification_rounds: int = Field(default=3, ge=0, le=10)
     thread_expiry_hours: int = Field(default=168, ge=1)
     outbound_notifications: list[str] = Field(default_factory=list)
@@ -53,7 +51,7 @@ class GateBundle:
 
     @property
     def surface_label(self) -> str:
-        return (self.config.surface_label or "desk").strip() or "desk"
+        return (self.config.surface_label or "gate").strip() or "gate"
 
     @property
     def public_path(self) -> str:

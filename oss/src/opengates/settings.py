@@ -14,6 +14,14 @@ class Settings:
     openai_api_key: str | None
     openai_model: str
     debug_prompts: bool
+    smtp_host: str | None
+    smtp_port: int
+    smtp_username: str | None
+    smtp_password: str | None
+    smtp_use_tls: bool
+    smtp_use_ssl: bool
+    notification_from_email: str | None
+    notification_from_name: str
 
 
 def get_settings() -> Settings:
@@ -26,6 +34,20 @@ def get_settings() -> Settings:
     openai_api_key = os.getenv("OPENAI_API_KEY", file_env.get("OPENAI_API_KEY"))
     openai_model = os.getenv("OPENGATES_OPENAI_MODEL", file_env.get("OPENGATES_OPENAI_MODEL", "gpt-5-mini"))
     debug_prompts = _as_bool(os.getenv("OPENGATES_DEBUG_PROMPTS", file_env.get("OPENGATES_DEBUG_PROMPTS", "0")))
+    smtp_host = os.getenv("OPENGATES_SMTP_HOST", file_env.get("OPENGATES_SMTP_HOST"))
+    smtp_port = int(os.getenv("OPENGATES_SMTP_PORT", file_env.get("OPENGATES_SMTP_PORT", "587")))
+    smtp_username = os.getenv("OPENGATES_SMTP_USERNAME", file_env.get("OPENGATES_SMTP_USERNAME"))
+    smtp_password = os.getenv("OPENGATES_SMTP_PASSWORD", file_env.get("OPENGATES_SMTP_PASSWORD"))
+    smtp_use_tls = _as_bool(os.getenv("OPENGATES_SMTP_USE_TLS", file_env.get("OPENGATES_SMTP_USE_TLS", "1")))
+    smtp_use_ssl = _as_bool(os.getenv("OPENGATES_SMTP_USE_SSL", file_env.get("OPENGATES_SMTP_USE_SSL", "0")))
+    notification_from_email = os.getenv(
+        "OPENGATES_NOTIFICATION_FROM_EMAIL",
+        file_env.get("OPENGATES_NOTIFICATION_FROM_EMAIL"),
+    )
+    notification_from_name = os.getenv(
+        "OPENGATES_NOTIFICATION_FROM_NAME",
+        file_env.get("OPENGATES_NOTIFICATION_FROM_NAME", "OpenGates"),
+    )
     return Settings(
         project_root=project_root,
         gates_dir=gates_dir,
@@ -34,6 +56,14 @@ def get_settings() -> Settings:
         openai_api_key=openai_api_key,
         openai_model=openai_model,
         debug_prompts=debug_prompts,
+        smtp_host=smtp_host,
+        smtp_port=smtp_port,
+        smtp_username=smtp_username,
+        smtp_password=smtp_password,
+        smtp_use_tls=smtp_use_tls,
+        smtp_use_ssl=smtp_use_ssl,
+        notification_from_email=notification_from_email,
+        notification_from_name=notification_from_name,
     )
 
 

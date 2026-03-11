@@ -1,12 +1,18 @@
-# OpenGates OSS MVP
+# OpenGates
 
-Local-first, agent-native inbound gate runtime.
+Open-source runtime for filtering inbound through conversation.
+
+You define what you care about in a few Markdown files. OpenGates handles the conversation — decline, clarify, or escalate — so only the best signal reaches you.
+
+Outbound is getting cheaper every month. This is the other side of that trade.
+
+OpenGates powers [Ante](https://ante.so), the hosted product.
 
 ## What This Includes
-- a minimal FastAPI reference UI for hosted gate threads
-- a local thread engine that processes each turn into `decline`, `clarify`, or `escalate`
-- a Markdown-first gate bundle
-- local thread, message, decision, and sender storage
+- a thread engine that processes each turn into `decline`, `clarify`, or `escalate`
+- a Markdown-first gate bundle format
+- a minimal FastAPI reference UI
+- local storage for threads, messages, decisions, and sender profiles
 - a starter gate under `gates/demo-investor`
 - API routes for external form/chat frontends
 
@@ -31,7 +37,7 @@ flowchart LR
     validate decision
     enforce turn depth
     block criteria leaks
-    no payment auto-pass"]
+    build principal summary"]
     F --> G["Thread State
     decline / clarify / escalate"]
     G --> H["Local Store
@@ -42,8 +48,8 @@ flowchart LR
     events
     sender profiles"]
     H --> I["Review / Connectors
-    digest
-    email
+    principal summary
+    escalation email
     Telegram
     Slack"]
 ```
@@ -53,9 +59,10 @@ flowchart LR
 2. The runtime converts the inbound turn into stable thread and submission schemas.
 3. OpenGates loads the gate bundle for that thread's gate.
 4. The provider decides `decline`, `clarify`, or `escalate` for the current turn.
-5. The runtime applies guardrails and enforces remaining clarification rounds.
-6. The thread state, messages, decision, event log, and sender profile are persisted locally.
-7. The built-in UI or an external client can fetch the updated thread and render the next step.
+5. The runtime applies guardrails, enforces remaining clarification rounds, and builds a principal-facing summary for escalations.
+6. If a principal email and SMTP settings are configured, OpenGates sends the escalation email.
+7. The thread state, messages, decision, event log, and sender profile are persisted locally.
+8. The built-in UI or an external client can fetch the updated thread and render the next step.
 
 ## Quick Start
 ```bash
@@ -71,43 +78,23 @@ Fastest test route:
 
 ## Gate Bundle
 Each gate lives in `gates/<gate_id>/` with:
-- `focus.md`
-- `standards.md`
-- `voice.md`
-- `examples.md`
-- optional `gate.yaml`
-
-These files define:
-- what the user cares about
-- what quality bar must be met
-- how replies should sound
-- examples that sharpen the gate's judgment
-- thread depth, public naming, and route behavior through `gate.yaml`
+- `focus.md` — what you care about
+- `standards.md` — what quality bar must be met
+- `voice.md` — how replies should sound
+- `examples.md` — examples that sharpen the gate's judgment
+- optional `gate.yaml` — thread depth, naming, route behavior
 
 Useful `gate.yaml` fields:
-- `title`: public page title such as `Investor Desk`
-- `assistant_name`: label shown on assistant replies in the reference UI
-- `surface_label`: softer public noun for copy like `desk` or `briefing desk`
-- `public_path`: public route for the intake
+- `title`: public page title such as `Investor Gate`
+- `assistant_name`: label shown on assistant replies
+- `surface_label`: public noun for copy like `gate`
+- `public_path`: public route for the gate page
+- `principal_email`: recipient for escalation emails
 - `max_clarification_rounds`: bounded depth for follow-up turns
 
-## Current Runtime
-The current MVP ships with a deterministic heuristic provider so the system runs out of the box. The provider boundary is explicit so a real model adapter can replace it without changing the thread engine, storage, or gate bundle contract.
-
-## Reference UI And API
-The built-in web app is a reference client for the thread engine. External frontends can use the same engine over API.
-
-Useful routes:
-- `GET /demo`
-- `GET /g/{gate_id}`
-- `GET /t/{thread_id}`
-- `POST /api/gates/{gate_id}/threads`
-- `GET /api/threads/{thread_id}`
-- `POST /api/threads/{thread_id}/reply`
-
 ## Provider Strategy
-- `HeuristicDecisionProvider`: catches obvious spam, applies explicit reject rules, and handles no-key local mode
-- future LLM provider: handles ambiguous judgment, better tone, stronger few-shot use, and richer summaries
+- `HeuristicDecisionProvider`: catches obvious spam, applies explicit reject rules, works without any API key
+- future LLM provider: handles ambiguous judgment, better tone, stronger few-shot use, richer summaries
 - runtime guardrails stay outside both, so behavior remains auditable and stable
 
 ## OpenAI Provider
@@ -130,6 +117,23 @@ Notes:
 - `openai` mode uses the OpenAI Responses API with structured output parsing
 - obvious spam still gets short-circuited by heuristics before the model call
 - if the OpenAI call fails, the runtime falls back to the heuristic provider
+
+## Escalation Email
+OpenGates can send the first escalation email when both of these are true:
+- `principal_email` is set in the gate's `gate.yaml`
+- SMTP env vars are configured
+
+Supported env vars:
+```bash
+OPENGATES_SMTP_HOST=smtp.example.com
+OPENGATES_SMTP_PORT=587
+OPENGATES_SMTP_USERNAME=...
+OPENGATES_SMTP_PASSWORD=...
+OPENGATES_SMTP_USE_TLS=1
+OPENGATES_SMTP_USE_SSL=0
+OPENGATES_NOTIFICATION_FROM_EMAIL=gatekeeper@example.com
+OPENGATES_NOTIFICATION_FROM_NAME=OpenGates
+```
 
 ## Repo Shape
 ```text

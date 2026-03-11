@@ -9,16 +9,15 @@ def test_demo_intake_renders_topics(monkeypatch, tmp_path) -> None:
 
     home = client.get("/")
     assert home.status_code == 200
-    assert "InboundAI" in home.text
-    assert "The inbound router for scarce attention" in home.text
-    assert "Why email is required on web" in home.text
+    assert "Ante" in home.text
+    assert "Your attention has a price" in home.text
+    assert "Request early access" in home.text
 
     response = client.get("/demo")
     assert response.status_code == 200
-    assert "Investor Desk" in response.text
-    assert "Start conversation" in response.text
+    assert "Investor Gate" in response.text
+    assert "Submit" in response.text
     assert "Applied AI with real user pull" in response.text
-    assert "Required for verification and handoff" in response.text
 
 
 def test_thread_create_and_view(monkeypatch, tmp_path) -> None:

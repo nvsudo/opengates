@@ -32,7 +32,7 @@ Identify what must change in the current `oss/` implementation before it matches
 
 ## Required Changes In `oss/`
 ### Gate Config And Templates
-- Extend `GateConfig` to support `public_path`, `max_clarification_rounds`, optional `thread_expiry`, optional outbound notification settings, and optional charging fields.
+- Extend `GateConfig` to support `public_path`, `max_clarification_rounds`, optional `thread_expiry`, and principal notification settings.
 - Update starter gates to include thread-first defaults.
 
 ### Schemas And Storage
@@ -45,7 +45,9 @@ Identify what must change in the current `oss/` implementation before it matches
 - Change the runtime from one-shot processing to thread-aware processing.
 - Pass thread history and remaining turns into the provider context.
 - Enforce clarification depth and force a final action or review when the limit is reached.
+- Add a principal-facing escalation summary with a reusable `why_this_matters` message.
 - Separate current-message evaluation from final escalation or handoff execution.
+- Send the initial escalation email when a principal email and notifier are configured.
 
 ### Web App
 - Replace the current result page with a chat-like thread page.
@@ -58,6 +60,7 @@ Identify what must change in the current `oss/` implementation before it matches
 
 ### Provider Layer
 - Expand the provider context to include thread history, thread state, and remaining clarification rounds.
+- Extend structured output so escalations include principal summary fields.
 - Ensure prompt-debug logging captures the exact thread context sent to the model.
 - Keep heuristics as prefilter and fallback logic.
 
@@ -71,7 +74,7 @@ Identify what must change in the current `oss/` implementation before it matches
 - email ingress adapters
 - outbound intro email generation
 - Slack or Telegram notifications
-- pricing and payment processor integration
+- payment and payout orchestration in Ante, not OpenGates
 - managed hosted deployment layers
 
 ## Recommendation

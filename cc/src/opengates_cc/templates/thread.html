@@ -1,65 +1,86 @@
 {% extends "base.html" %}
 
-{% block title %}{{ gate.title }}{% endblock %}
+{% block title %}Thread — {{ gate.title }} — Ante{% endblock %}
 
-{% block screen %}
-  <div class="topbar">
-    <div class="nav-pill">
-      <div class="nav-main">
-        <div class="avatar">{{ presentation.assistant_avatar }}</div>
-        <div>
-          <div class="nav-title">{{ gate.assistant_name }}</div>
-          <div class="nav-status">{{ presentation.assistant_status }}</div>
-        </div>
+{% block content %}
+  <a class="back-link" href="{{ gate.public_path }}">← {{ gate.title }}</a>
+
+  <div class="thread-header">
+    <div class="thread-meta">
+      <div class="meta-chip {{ 'good' if thread_view.latest_decision and thread_view.latest_decision.decision == 'escalate' else '' }}">
+        {{ thread_status_label }}
       </div>
-      <div class="nav-action">◌</div>
+      <div class="meta-chip">{{ thread_view.thread.remaining_clarification_rounds }} follow-up{{ 's' if thread_view.thread.remaining_clarification_rounds != 1 }} left</div>
+      <div class="meta-chip">ref: {{ thread_view.thread.thread_id[-6:] }}</div>
     </div>
   </div>
 
-  <div class="scroll">
-    <a class="nav-link" href="{{ gate.public_path }}">← Start again</a>
+  {% if thread_view.thread.status == "declined" %}
+    <div class="thread-banner thread-banner--closed">This conversation has been closed.</div>
+  {% elif thread_view.thread.status == "review" %}
+    <div class="thread-banner thread-banner--review">This thread is under manual review.</div>
+  {% elif thread_view.thread.status == "escalated" %}
+    <div class="thread-banner thread-banner--escalated">Escalated — forwarded for review.</div>
+  {% endif %}
 
-    <div class="thread-meta">
-      <div class="meta-chip">{{ thread_status_label }}</div>
-      <div class="meta-chip">turns left: {{ thread_view.thread.remaining_clarification_rounds }}</div>
-      <div class="meta-chip">ref: {{ thread_view.thread.thread_id[-6:] }}</div>
-      {% if thread_view.latest_decision and thread_view.latest_decision.decision == "escalate" %}
-        <div class="meta-chip good">ready for review</div>
-      {% endif %}
-    </div>
-
-    <div class="chat">
-      {% if thread_view.thread.status == "declined" %}
-        <div class="bubble system">This conversation is closed.</div>
-      {% elif thread_view.thread.status == "review" %}
-        <div class="bubble system">This thread needs manual review.</div>
-      {% elif thread_view.thread.status == "escalated" %}
-        <div class="bubble system">This thread has been escalated for review.</div>
-      {% endif %}
-
-      {% for message in thread_view.messages %}
-        <div class="bubble {{ 'assistant' if message.role == 'gate' else 'user' if message.role == 'sender' else 'system' }}">
-          <div class="eyebrow">
+  <div class="chat">
+    {% for message in thread_view.messages %}
+      <div class="msg {{ 'msg-gate' if message.role == 'gate' else 'msg-sender' if message.role == 'sender' else 'msg-system' }}">
+        {% if message.role != 'system' %}
+          <div class="msg-label">
             {% if message.role == "gate" %}
               {{ gate.assistant_name }}
             {% elif message.role == "sender" %}
               You
-            {% else %}
-              System
             {% endif %}
           </div>
-          <div class="message-copy">{{ message.content }}</div>
-        </div>
-      {% endfor %}
-    </div>
+        {% endif %}
+        {{ message.content }}
+      </div>
+    {% endfor %}
   </div>
 
   {% if not thread_closed %}
     <div class="composer-wrap">
       <form class="composer" method="post" action="/t/{{ thread_view.thread.thread_id }}/reply">
-        <textarea name="content" placeholder="Reply to the latest question." required></textarea>
+        <textarea name="content" placeholder="Reply to the follow-up question." required></textarea>
         <button type="submit">↑</button>
       </form>
     </div>
   {% endif %}
+{% endblock %}
+
+{% block head %}
+<style>
+  .thread-header {
+    margin-bottom: 16px;
+  }
+
+  .thread-banner {
+    text-align: center;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .thread-banner--closed {
+    background: rgba(181, 67, 42, 0.08);
+    color: var(--status-declined);
+    border: 1px solid rgba(181, 67, 42, 0.15);
+  }
+
+  .thread-banner--review {
+    background: rgba(166, 124, 0, 0.08);
+    color: var(--status-clarify);
+    border: 1px solid rgba(166, 124, 0, 0.15);
+  }
+
+  .thread-banner--escalated {
+    background: rgba(26, 122, 58, 0.08);
+    color: var(--status-escalated);
+    border: 1px solid rgba(26, 122, 58, 0.15);
+  }
+</style>
 {% endblock %}

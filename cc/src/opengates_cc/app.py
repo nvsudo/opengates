@@ -21,25 +21,16 @@ def create_app() -> FastAPI:
     gate_loader = GateLoader(settings.gates_dir)
     store = LocalStore(settings.data_dir)
     runtime = GateRuntime(gate_loader=gate_loader, store=store, provider=build_provider(settings))
+    homepage_path = settings.project_root.parent / "ante-homepage.html"
 
-    app = FastAPI(title="InboundAI")
+    app = FastAPI(title="Ante")
     templates = Jinja2Templates(directory=str(Path(__file__).with_name("templates")))
 
     @app.get("/", response_class=HTMLResponse)
-    def index(request: Request) -> HTMLResponse:
-        desks = []
-        for gate_id in gate_loader.list_gates():
-            bundle = gate_loader.load(gate_id)
-            desks.append(
-                {
-                    "gate_id": gate_id,
-                    "title": bundle.title,
-                    "assistant_name": bundle.assistant_name,
-                    "public_path": bundle.public_path,
-                    "preview": " · ".join(bundle.focus_items[:3]),
-                }
-            )
-        return templates.TemplateResponse(request, "index.html", {"desks": desks})
+    def index() -> HTMLResponse:
+        if not homepage_path.exists():
+            raise HTTPException(status_code=500, detail="canonical homepage file is missing")
+        return HTMLResponse(homepage_path.read_text(encoding="utf-8"))
 
     @app.get("/demo", response_class=HTMLResponse)
     def demo_desk(request: Request) -> HTMLResponse:
@@ -65,7 +56,6 @@ def create_app() -> FastAPI:
         email: str = Form(""),
         topic: str = Form(""),
         content: str = Form(...),
-        priority_paid: str | None = Form(None),
     ) -> RedirectResponse:
         if not email.strip():
             raise HTTPException(status_code=400, detail="email is required for web intake")
@@ -75,7 +65,6 @@ def create_app() -> FastAPI:
                 name=name,
                 email=email,
                 content=_compose_intake_content(topic=topic, content=content),
-                payment_status="paid" if priority_paid else "none",
                 source="web_thread",
             )
         except FileNotFoundError as exc:
@@ -129,7 +118,6 @@ def create_app() -> FastAPI:
                 name=payload.name,
                 email=payload.email,
                 content=payload.content,
-                payment_status=payload.payment_status,
                 source="api",
             )
         except FileNotFoundError as exc:
@@ -150,7 +138,6 @@ def create_app() -> FastAPI:
             processed = runtime.reply_to_thread(
                 thread_id,
                 content=payload.content,
-                payment_status=payload.payment_status,
                 source="api",
             )
         except FileNotFoundError as exc:
