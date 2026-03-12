@@ -1,4 +1,11 @@
+.DS_Store
 .playwright-cli/
-cc/.venv/
-cc/.pytest_cache/
-oss/build/
+.env
+.env.local
+.venv/
+.pytest_cache/
+__pycache__/
+build/
+dist/
+data/
+src/*.egg-info/
