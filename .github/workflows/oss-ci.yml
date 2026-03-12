@@ -1,0 +1,48 @@
+name: OpenGates CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  oss:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Sync deps
+        run: uv sync --extra dev
+
+      - name: Run tests
+        run: uv run pytest
+
+      - name: Build package
+        run: uv build
+
+      - name: Verify packaged assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          wheel = next(Path("dist").glob("*.whl"))
+          required = {
+              "opengates/templates/index.html",
+              "opengates/templates/intake.html",
+              "opengates/templates/thread.html",
+              "opengates/starter_gates/demo-investor/gate.yaml",
+              "opengates/starter_gates/demo-investor/focus.md",
+          }
+          with ZipFile(wheel) as archive:
+              names = set(archive.namelist())
+          missing = sorted(required - names)
+          if missing:
+              raise SystemExit(f"missing packaged assets: {missing}")
+          PY
