@@ -2,128 +2,127 @@
 
 Source-available runtime for filtering inbound through conversation.
 
-You define what you care about in a few Markdown files. OpenGates handles the conversation — decline, clarify, or escalate — so only the best signal reaches you.
+OpenGates lets you define what you care about in a few files, then handles the inbound thread for you: decline, ask a bounded follow-up, or escalate with a clean summary. It is the runtime behind [Ante](https://ante.so), the hosted product.
 
-Outbound is getting cheaper every month. Millions of agents will soon be writing to you. You will miss the signal from the noise. This is the other side of that trade.
+## What It Does
 
-OpenGates powers [Ante](https://ante.so), the hosted product.
+OpenGates is built for attention gating:
+- define a gate with Markdown files instead of a large config surface
+- run a threaded decision loop over inbound messages
+- return one of three outcomes: `decline`, `clarify`, or `escalate`
+- keep decision guardrails and persistence outside the model
+- ship with a minimal FastAPI UI and HTTP endpoints you can build on
 
-Licensed under Elastic License 2.0. You can use it internally, including in commercial settings, but you cannot offer OpenGates itself as a hosted or managed service.
+## Why This Exists
 
-Requires Python 3.10+.
+Outbound is getting cheaper every month. More agents will write to you, not fewer. If every inbound message can be polished, the bottleneck becomes judgment.
 
-## What This Includes
-- a thread engine that processes each turn into `decline`, `clarify`, or `escalate`
-- a Markdown-first gate bundle format
-- a minimal FastAPI reference UI
-- local storage for threads, messages, decisions, and sender profiles
-- a bundled starter gate based on `demo-investor`
-- API routes for external form/chat frontends
+OpenGates is the runtime for that judgment layer:
+- local-first by default
+- file-based and auditable
+- useful without mailbox access
+- usable with heuristics today and stronger model providers later
 
-## Architecture
-```mermaid
-flowchart LR
-    A["Frontend
-    hosted UI / external form / chat"] --> B["Thread API
-    create thread / append reply / fetch state"]
-    B --> C["Normalize Message
-    thread + submission schemas"]
-    C --> D["Load Gate Bundle
-    focus.md
-    standards.md
-    voice.md
-    examples.md
-    gate.yaml"]
-    D --> E["Decision Provider
-    heuristic now
-    LLM later"]
-    E --> F["Runtime Guardrails
-    validate decision
-    enforce turn depth
-    block criteria leaks
-    build principal summary"]
-    F --> G["Thread State
-    decline / clarify / escalate"]
-    G --> H["Local Store
-    threads
-    thread messages
-    submissions
-    decisions
-    events
-    sender profiles"]
-    H --> I["Review / Connectors
-    principal summary
-    escalation email
-    Telegram
-    Slack"]
-```
+## Status
 
-## How It Works
-1. A sender starts a thread through the built-in web UI or an external client.
-2. The runtime converts the inbound turn into stable thread and submission schemas.
-3. OpenGates loads the gate bundle for that thread's gate.
-4. The provider decides `decline`, `clarify`, or `escalate` for the current turn.
-5. The runtime applies guardrails, enforces remaining clarification rounds, and builds a principal-facing summary for escalations.
-6. If a principal email and SMTP settings are configured, OpenGates sends the escalation email.
-7. The thread state, messages, decision, event log, and sender profile are persisted locally.
-8. The built-in UI or an external client can fetch the updated thread and render the next step.
+- Source-available under Elastic License 2.0
+- Python 3.10+
+- Install from source today
+- PyPI package name: `opengates`
 
 ## Quick Start
 
-Installable package:
 ```bash
-pip install opengates
-opengates serve --host 127.0.0.1 --port 8000
-```
-
-Source checkout:
-```bash
+git clone https://github.com/nvsudo/opengates
+cd opengates
 uv sync
 uv run opengates serve --host 127.0.0.1 --port 8000
 ```
 
-Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
+Open [http://127.0.0.1:8000/demo](http://127.0.0.1:8000/demo).
 
-Fastest test route:
-- [http://127.0.0.1:8000/demo](http://127.0.0.1:8000/demo)
+The repo includes a starter gate under [`gates/demo-investor`](./gates/demo-investor). If you run from a clean working directory without a local `./gates`, OpenGates falls back to the bundled starter gate packaged with the runtime.
 
-## Gate Bundle
-Each gate lives in `gates/<gate_id>/` with:
-- `focus.md` — what you care about
-- `standards.md` — what quality bar must be met
-- `voice.md` — how replies should sound
-- `examples.md` — examples that sharpen the gate's judgment
-- optional `gate.yaml` — thread depth, naming, route behavior
+## Install Options
 
-Useful `gate.yaml` fields:
-- `title`: public page title such as `Investor Gate`
-- `assistant_name`: label shown on assistant replies
-- `surface_label`: public noun for copy like `gate`
-- `public_path`: public route for the gate page
-- `assistant_avatar`, `assistant_status`, `welcome_headline`, `welcome_body`: optional intake-page presentation
-- `composer_placeholder`, `invited_topics`: optional intake-page guidance
-- `principal_email`: recipient for escalation emails
-- `max_clarification_rounds`: bounded depth for follow-up turns
-
-If you run from a clean working directory, OpenGates falls back to the bundled `demo-investor` starter gate. If a local `./gates` directory exists, it takes precedence. You can also point to a custom gate directory with `OPENGATES_GATES_DIR`.
-
-## Provider Strategy
-- `HeuristicDecisionProvider`: catches obvious spam, applies explicit reject rules, works without any API key
-- future LLM provider: handles ambiguous judgment, better tone, stronger few-shot use, richer summaries
-- runtime guardrails stay outside both, so behavior remains auditable and stable
-
-## OpenAI Provider
-To use a real model:
-
-If you are working from source:
+With `uv`:
 
 ```bash
-cp .env.example .env
+uv sync
+uv run opengates serve
 ```
 
-Otherwise create a `.env` file in your working directory with:
+With `pip`:
 
-Set:
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+opengates serve
+```
+
+## How It Works
+
+1. A sender starts a thread through the built-in UI or an external client.
+2. OpenGates loads the gate bundle for that gate.
+3. A decision provider evaluates the current turn.
+4. The runtime enforces guardrails and returns `decline`, `clarify`, or `escalate`.
+5. Thread state, messages, decisions, and sender profile data are persisted locally.
+6. The built-in UI or your own frontend can render the next step.
+
+## Gate Bundle
+
+Each gate lives in `gates/<gate_id>/` and usually includes:
+
+```text
+gates/my-gate/
+  focus.md
+  standards.md
+  voice.md
+  examples.md
+  gate.yaml
+```
+
+- `focus.md`: what the gate is for
+- `standards.md`: what good looks like
+- `voice.md`: how replies should sound
+- `examples.md`: examples that sharpen judgment
+- `gate.yaml`: optional UI and runtime settings
+
+Common `gate.yaml` fields:
+
+```yaml
+title: Investor Gate
+assistant_name: OpenGates
+surface_label: gate
+public_path: /investor
+max_clarification_rounds: 2
+principal_email: founder@example.com
+```
+
+Supported UI fields include:
+- `assistant_avatar`
+- `assistant_status`
+- `welcome_headline`
+- `welcome_body`
+- `composer_placeholder`
+- `invited_topics`
+
+Create a new gate from the starter bundle:
+
+```bash
+opengates init-gate --from demo-investor --to my-gate
+```
+
+## Providers
+
+OpenGates currently supports two decision paths:
+
+- `heuristic`: no API key required, good for obvious spam and explicit rules
+- `openai`: uses the OpenAI Responses API for more ambiguous cases
+
+Use the OpenAI provider by creating a `.env` file in your working directory:
+
 ```bash
 OPENGATES_PROVIDER=openai
 OPENAI_API_KEY=your_key_here
@@ -132,18 +131,16 @@ OPENGATES_DEBUG_PROMPTS=1
 ```
 
 Notes:
-- `heuristic` mode works without any key
-- `openai` mode uses the OpenAI Responses API with structured output parsing
-- obvious spam still gets short-circuited by heuristics before the model call
-- if the OpenAI call fails, the runtime falls back to the heuristic provider
-- `.env` and `.env.local` are read from your current working directory, or from `OPENGATES_CONFIG_DIR` if you set it
+- `.env` and `.env.local` are read from the current working directory
+- if `OPENGATES_CONFIG_DIR` is set, config is read from there instead
+- if the OpenAI call fails, the runtime falls back to heuristics
 
 ## Escalation Email
-OpenGates can send the first escalation email when both of these are true:
-- `principal_email` is set in the gate's `gate.yaml`
-- SMTP env vars are configured
 
-Supported env vars:
+OpenGates can send an escalation email when:
+- `principal_email` is set in `gate.yaml`
+- SMTP settings are configured
+
 ```bash
 OPENGATES_SMTP_HOST=smtp.example.com
 OPENGATES_SMTP_PORT=587
@@ -155,7 +152,16 @@ OPENGATES_NOTIFICATION_FROM_EMAIL=gatekeeper@example.com
 OPENGATES_NOTIFICATION_FROM_NAME=OpenGates
 ```
 
-## Repo Shape
+## CLI
+
+```bash
+opengates serve
+opengates list-gates
+opengates init-gate --from demo-investor --to my-gate
+```
+
+## Project Layout
+
 ```text
 gates/
   demo-investor/
@@ -171,21 +177,25 @@ src/opengates/
 tests/
 ```
 
-## Commands
+## Development
+
+Run tests:
+
 ```bash
-opengates list-gates
-opengates init-gate --from demo-investor --to my-gate
-opengates serve
+uv run python -m pytest
 ```
 
-## Tests
+Build the package:
+
 ```bash
-uv run pytest
+uv build
 ```
 
 ## License
 
-OpenGates is source-available under Elastic License 2.0. That means:
+OpenGates is source-available under Elastic License 2.0.
+
+That means:
 - internal use is allowed, including inside commercial companies
 - modification is allowed
 - redistribution is allowed subject to the license terms
