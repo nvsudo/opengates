@@ -25,7 +25,8 @@ OpenGates is the runtime for that judgment layer:
 
 ## Status
 
-- Source-available under Elastic License 2.0
+- Source-available under Elastic License 2.0 (`ELv2`)
+- Not OSI open source
 - Python 3.10+
 - Published on PyPI as `opengates`
 - PyPI package name: `opengates`
@@ -40,6 +41,28 @@ opengates serve --host 127.0.0.1 --port 8000
 Open [http://127.0.0.1:8000/demo](http://127.0.0.1:8000/demo).
 
 The repo includes a starter gate under [`gates/demo-investor`](./gates/demo-investor). If you run from a clean working directory without a local `./gates`, OpenGates falls back to the bundled starter gate packaged with the runtime.
+
+## Getting Started In 60 Seconds
+
+```bash
+pip install opengates
+opengates serve --host 127.0.0.1 --port 8000
+```
+
+Then:
+1. open [http://127.0.0.1:8000/demo](http://127.0.0.1:8000/demo)
+2. submit a test message
+3. watch the default heuristic provider return `decline`, `clarify`, or `escalate`
+4. copy the starter gate and customize it:
+
+```bash
+opengates init-gate --from demo-investor --to my-gate
+```
+
+What you get by default:
+- no API key required
+- local file-based state
+- bundled starter gate and reference UI
 
 ## Install Options
 
@@ -200,10 +223,12 @@ uv build
 
 ## License
 
-OpenGates is source-available under Elastic License 2.0.
+OpenGates is source-available under Elastic License 2.0 (`ELv2`). It is not released under an OSI-approved open source license.
 
 That means:
 - internal use is allowed, including inside commercial companies
 - modification is allowed
 - redistribution is allowed subject to the license terms
 - offering OpenGates itself as a hosted or managed service is not allowed
+
+See [LICENSE](./LICENSE) for the full terms.
