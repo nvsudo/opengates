@@ -27,16 +27,14 @@ OpenGates is the runtime for that judgment layer:
 
 - Source-available under Elastic License 2.0
 - Python 3.10+
-- Install from source today
+- Published on PyPI as `opengates`
 - PyPI package name: `opengates`
 
 ## Quick Start
 
 ```bash
-git clone https://github.com/nvsudo/opengates
-cd opengates
-uv sync
-uv run opengates serve --host 127.0.0.1 --port 8000
+pip install opengates
+opengates serve --host 127.0.0.1 --port 8000
 ```
 
 Open [http://127.0.0.1:8000/demo](http://127.0.0.1:8000/demo).
@@ -45,14 +43,23 @@ The repo includes a starter gate under [`gates/demo-investor`](./gates/demo-inve
 
 ## Install Options
 
-With `uv`:
+From PyPI with `uv`:
 
 ```bash
+uv tool install opengates
+opengates serve
+```
+
+From source with `uv`:
+
+```bash
+git clone https://github.com/nvsudo/opengates
+cd opengates
 uv sync
 uv run opengates serve
 ```
 
-With `pip`:
+From source with `pip`:
 
 ```bash
 python -m venv .venv
